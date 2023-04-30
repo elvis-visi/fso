@@ -2,13 +2,19 @@ import { useState } from 'react'
 
 
 const Statistics  = ({good,neutral,bad}) => {
-
+//average score (good: 1, neutral: 0, bad: -1)
+let totalReviews = good + neutral + bad;
+let average = (good - bad) / totalReviews
+let positive = good / totalReviews * 100
   return (
     <div>
       <h1>Statistics</h1>
       good {good} <br></br>
       neutral {neutral} <br></br>
-      bad {bad}
+      bad {bad} <br></br>
+      total {good + neutral + bad} <br></br>
+      average {average} <br></br>
+      positive {positive} %
    </div>
   )
 
@@ -32,8 +38,8 @@ const [bad, setBad] = useState(0)
 
 //clicking handlers
 const goodHandler = () => setGood(good + 1)
-const neutralHandler = () => setNeutral(good + 1)
-const badHandler = () => setBad(good + 1)
+const neutralHandler = () => setNeutral(neutral + 1)
+const badHandler = () => setBad(bad + 1)
 
 
 
