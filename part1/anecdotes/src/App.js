@@ -9,6 +9,35 @@ const Button = ({handleClick, text}) => {
   )
 }
 
+const Display = ({anecdotes,day,dayVotes}) => {
+
+  return(
+    <>
+      <h1>Anecdote of the day</h1> 
+      <div>
+          {anecdotes[day]} <br></br>
+          has {dayVotes} votes
+      </div>
+    </>
+  )
+}
+
+const AnecdoteWithMostVotes = ({anecdotes,points}) => {
+
+  const mostVotes = Math.max(...points); //largest value in the points array
+  const mostVotesIndex = points.indexOf(mostVotes)
+
+  return (
+    <>
+      <h1>Anecdote with the most votes</h1>
+      {anecdotes[mostVotesIndex]} <br></br> has {mostVotes} votes
+    </>
+  )
+  
+
+}
+
+
 const App = () => {
   const anecdotes = [
     'If it hurts, do it more often.',
@@ -38,14 +67,19 @@ const App = () => {
     setPoints(copy)
    }
 
+ 
 
   return (
     <div>
-      {anecdotes[selected]} <br></br>
+     <Display anecdotes={anecdotes}
+      day={selected} dayVotes={points[selected]}/>
       <Button handleClick={handleVotes} text="vote"/>
       <Button handleClick={nextAnecdoteHandler} text="next anecdote"/>
+      <AnecdoteWithMostVotes anecdotes={anecdotes} points={points}/>
     </div>
   )
 }
+
+
 
 export default App;
