@@ -22,6 +22,8 @@ const App = () => {
   ]
    
   const [selected, setSelected] = useState(0)
+  const [points,setPoints] = useState(
+    new Array(anecdotes.length).fill(0))
 
    const nextAnecdoteHandler = () => {
     let random = Math.floor(Math.random() * anecdotes.length)
@@ -29,10 +31,18 @@ const App = () => {
     setSelected(random)
    }
 
+   const handleVotes = () => {
+    //increase the value of the current selected anecdote on click
+    const copy = [...points]  //spread operator
+    copy[selected] += 1;
+    setPoints(copy)
+   }
+
 
   return (
     <div>
       {anecdotes[selected]} <br></br>
+      <Button handleClick={handleVotes} text="vote"/>
       <Button handleClick={nextAnecdoteHandler} text="next anecdote"/>
     </div>
   )
