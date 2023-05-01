@@ -4,17 +4,27 @@ const Course = ({course}) => {
     <>
       <Header name={course.name} />
       <Content parts={course.parts} />
-    
+      <Total parts={course.parts} />
+      
     </>
   )
 
 }
 
-
-
 const Header = ({name}) => <h1>{name}</h1>
 
-const Total = ({ sum }) => <p>Number of exercises {sum}</p>
+const Total = ({ parts }) => 
+{
+  const total = parts.reduce(
+    (prev,current) => prev + current.exercises, 0
+  )
+
+  return (
+    <p>Number of exercises {total}</p>
+        )
+ }
+
+
 
 const Part = ({ part }) => 
   <p>
@@ -48,11 +58,20 @@ const App = () => {
         name: 'State of a component',
         exercises: 14,
         id: 3
+      },
+      {
+        name: 'Redux',
+        exercises: 5,
+        id: 4
       }
     ]
   }
 
-  return <Course course={course} />
+  return (
+    <Course course={course} />
+  )
+  
+ 
 }
 
 export default App
