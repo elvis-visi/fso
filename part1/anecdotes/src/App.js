@@ -29,8 +29,7 @@ const AnecdoteWithMostVotes = ({anecdotes,points}) => {
 
   return (
     <>
-      <h1>Anecdote with the most votes</h1>
-      {anecdotes[mostVotesIndex]} <br></br> has {mostVotes} votes
+       {anecdotes[mostVotesIndex]} <br></br> has {mostVotes} votes
     </>
   )
   
