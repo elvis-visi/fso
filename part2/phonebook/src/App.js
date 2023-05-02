@@ -20,12 +20,24 @@ const App = () => {
  const addNewName = (event) => {
   event.preventDefault()
 
-  //new person object
-  const obj = {
+ 
+
+
+  //add obj only if a user with this name doesn't exist in persons
+  const nameExists = persons.some(person => person.name === newName)
+
+  if(!nameExists)
+  {
+     //new person object
+    const obj = {
     name : newName
   }
-  //add to the persons array
-  setPersons(persons.concat(obj))
+    setPersons(persons.concat(obj))
+  }else{
+    alert(`${newName} is already added to phonebook`)
+  }
+
+ 
   setNewName('')
  }
 
