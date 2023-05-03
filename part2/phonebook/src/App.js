@@ -26,6 +26,24 @@ const App = () => {
   },[])
 
   
+  const removePerson = (id) => {
+    const person = persons.find((p) => p.id === id);
+    if (person && window.confirm(`Do you really want to delete ${person.name}?`)) {
+      personService
+        .remove(id)
+        .then(() => {
+          const updatedPersons = persons.filter(person => person.id !== id);
+          setPersons(updatedPersons);
+  
+          // Update the filteredPersons based on the current filter value
+          setFilteredPersons(updatedPersons.filter(person =>
+            person.name.toLowerCase().includes(filter.toLocaleLowerCase()))
+          );
+        });
+    }
+  }
+  
+
  const handleNameChange = (event) => {
   console.log(event.target.value)
   setNewName(event.target.value)
@@ -92,7 +110,7 @@ const App = () => {
     <Form addNewName={addNewName} newName={newName} 
     handleNameChange={handleNameChange} newNumber={newNumber}
     handleNumberChange={handleNumberChange} />
-    <Persons persons={filteredPersons} />
+    <Persons persons={filteredPersons} removePerson={removePerson} />
   
   </div>
   )
