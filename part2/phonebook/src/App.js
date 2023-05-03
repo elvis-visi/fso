@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import personService from './services/persons'
+import Notification from './components/Notification'
 
 
 const App = () => {
@@ -11,7 +12,8 @@ const App = () => {
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
   const [filteredPersons, setFilteredPersons] = useState(persons) 
-  
+  const [errorMessage, setErrorMessage] = useState(null)
+
   useEffect(() => {
     personService
     .getAll()
@@ -44,15 +46,7 @@ const App = () => {
   }
   
 
- const handleNameChange = (event) => {
-  console.log(event.target.value)
-  setNewName(event.target.value)
- }
-
- const handleNumberChange = (event) => {
-  console.log(event.target.value)
-  setNewNumber(event.target.value)
- }
+ 
 
  const handleFilterChange = (event) => {
   console.log(event.target.value)
@@ -88,6 +82,7 @@ const App = () => {
 
           // Update the filteredPersons based on the current filter value
           updateFilteredPersons(updatedPersons);
+
         })
         .catch(error => {
           console.log('Error updating person:', error);
@@ -105,20 +100,31 @@ const App = () => {
       });
   }
 
+  setErrorMessage( 
+   `${newName} was added`
+
+  )
+  setTimeout(() => {
+    setErrorMessage(null)
+  }, 5000)
+
   setNewName('');
   setNewNumber('');
 };
 
-
-
   return (
     <div>
     <h2>Phonebook</h2>
+    <Notification message={errorMessage} />
     <Filter filter={filter} handleFilterChange={handleFilterChange} /> 
     <h2>add a new</h2>
-    <Form addNewName={addNewName} newName={newName} 
-    handleNameChange={handleNameChange} newNumber={newNumber}
-    handleNumberChange={handleNumberChange} />
+    <Form 
+      addNewName={addNewName}
+      newName={newName} 
+      setNewName={setNewName}
+      newNumber={newNumber}
+      setNewNumber={setNewNumber}
+    />
     <Persons persons={filteredPersons} removePerson={removePerson} />
   
   </div>

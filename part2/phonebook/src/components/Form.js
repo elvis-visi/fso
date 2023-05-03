@@ -1,6 +1,15 @@
 
-const Form = ({addNewName,newName,handleNameChange,newNumber
-,handleNumberChange}) => {
+const Form = ({addNewName,newName,newNumber,setNewName,setNewNumber
+}) => {
+  const handleNameChange = (event) => {
+    console.log(event.target.value)
+    setNewName(event.target.value)
+   }
+  
+   const handleNumberChange = (event) => {
+    console.log(event.target.value)
+    setNewNumber(event.target.value)
+   }
 
     return (
 
