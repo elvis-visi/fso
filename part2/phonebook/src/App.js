@@ -85,7 +85,12 @@ const App = () => {
 
         })
         .catch(error => {
-          console.log('Error updating person:', error);
+         setErrorMessage(
+          `Error updating the person '${existingPerson.name}': ${error.message}`
+         )
+         setTimeout(() => {
+          setErrorMessage(null)
+         },5000)
         });
     }
   } else {
