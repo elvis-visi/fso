@@ -2,13 +2,11 @@ import { useState, useEffect } from 'react'
 import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
-import axios from 'axios'
 import personService from './services/persons'
 
 
 const App = () => {
   const [persons, setPersons] = useState([]) 
-
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [filter, setFilter] = useState('')
@@ -18,15 +16,20 @@ const App = () => {
     personService
     .getAll()
     .then(initialPersons => {
-    
       const data = initialPersons
       setPersons(data)
       setFilteredPersons(data)
     })
   },[])
 
-  
+  const updateFilteredPersons = (updatedPersons) => {
+    setFilteredPersons(updatedPersons.filter(person =>
+      person.name.toLowerCase().includes(filter.toLocaleLowerCase()))
+    );
+  };
+
   const removePerson = (id) => {
+    //make sure the person exists
     const person = persons.find((p) => p.id === id);
     if (person && window.confirm(`Do you really want to delete ${person.name}?`)) {
       personService
@@ -34,11 +37,8 @@ const App = () => {
         .then(() => {
           const updatedPersons = persons.filter(person => person.id !== id);
           setPersons(updatedPersons);
-  
           // Update the filteredPersons based on the current filter value
-          setFilteredPersons(updatedPersons.filter(person =>
-            person.name.toLowerCase().includes(filter.toLocaleLowerCase()))
-          );
+          updateFilteredPersons(updatedPersons);  
         });
     }
   }
@@ -66,41 +66,50 @@ const App = () => {
 
  }
 
+
+
  const addNewName = (event) => {
-  event.preventDefault()
-  //add obj only if a user with this name doesn't exist in persons
-  const nameExists = persons.some(person => person.name === newName)
+  event.preventDefault();
 
-  if(!nameExists)
-  {
-     //new person object
-    const obj = {
-    name : newName,
-    number : newNumber,
-    
+  const existingPerson = persons.find(person => person.name === newName);
+
+  const newPerson = {
+    name: newName,
+    number: newNumber,
+  };
+
+  if (existingPerson) {
+    if (window.confirm(`${newName} is already added to phonebook, replace the old number with a new one?`)) {
+      personService
+        .update(existingPerson.id, newPerson)
+        .then(updatedPerson => {
+          const updatedPersons = persons.map(person => person.id !== existingPerson.id ? person : updatedPerson);
+          setPersons(updatedPersons);
+
+          // Update the filteredPersons based on the current filter value
+          updateFilteredPersons(updatedPersons);
+        })
+        .catch(error => {
+          console.log('Error updating person:', error);
+        });
+    }
+  } else {
+    personService
+      .create(newPerson)
+      .then(returnedPerson => {
+        const updatedPersons = persons.concat(returnedPerson);
+        setPersons(updatedPersons);
+
+        // Update the filteredPersons based on the current filter value
+        updateFilteredPersons(updatedPersons);
+      });
   }
 
-  personService
-  .create(obj)
-  .then(returnedPerson => {
-    const updatedPersons = persons.concat(returnedPerson)
-    setPersons(updatedPersons)
+  setNewName('');
+  setNewNumber('');
+};
 
-    //update displayFiltered, check for the current filter value
-    setFilteredPersons(updatedPersons.filter(person => 
-      person.name.toLowerCase().includes(filter.toLocaleLowerCase())))
-  })
 
-  //const newPersons = persons.concat(obj)
-  //setPersons(newPersons)
- 
-  }else{
-    alert(`${newName} is already added to phonebook`)
-  }
-
-  setNewName('')
-  setNewNumber('')
- }
 
   return (
     <div>
