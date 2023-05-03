@@ -3,6 +3,7 @@ import Filter from './components/Filter'
 import Form from './components/Form'
 import Persons from './components/Persons'
 import axios from 'axios'
+import personService from './services/persons'
 
 
 const App = () => {
@@ -14,11 +15,11 @@ const App = () => {
   const [filteredPersons, setFilteredPersons] = useState(persons) 
   
   useEffect(() => {
-    axios
-    .get('http://localhost:3002/persons')
-    .then(response => {
-      console.log("response data",response.data)
-      const data = response.data
+    personService
+    .getAll()
+    .then(initialPersons => {
+    
+      const data = initialPersons
       setPersons(data)
       setFilteredPersons(data)
     })
@@ -58,14 +59,22 @@ const App = () => {
     const obj = {
     name : newName,
     number : newNumber,
-    id: persons.length + 1
+    
   }
-  const newPersons = persons.concat(obj)
-  setPersons(newPersons)
+
+  personService
+  .create(obj)
+  .then(returnedPerson => {
+    const updatedPersons = persons.concat(returnedPerson)
+    setPersons(updatedPersons)
 
     //update displayFiltered, check for the current filter value
-    setFilteredPersons(newPersons.filter(person => 
+    setFilteredPersons(updatedPersons.filter(person => 
       person.name.toLowerCase().includes(filter.toLocaleLowerCase())))
+  })
+
+  //const newPersons = persons.concat(obj)
+  //setPersons(newPersons)
  
   }else{
     alert(`${newName} is already added to phonebook`)
