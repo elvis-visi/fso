@@ -102,19 +102,26 @@ const App = () => {
 
         // Update the filteredPersons based on the current filter value
         updateFilteredPersons(updatedPersons);
+      
+
+      setNewName('');
+      setNewNumber('');
+
+      setErrorMessage(`${newName} was added`)
+
+       setTimeout(() => {
+         setErrorMessage(null)
+       }, 5000)
+      })
+       .catch(error => {
+        // Display the error message
+        setErrorMessage(error.response.data.error);
+        setTimeout(() => {
+          setErrorMessage(null);
+        }, 5000);
       });
+
   }
-
-  setErrorMessage( 
-   `${newName} was added`
-
-  )
-  setTimeout(() => {
-    setErrorMessage(null)
-  }, 5000)
-
-  setNewName('');
-  setNewNumber('');
 };
 
   return (
