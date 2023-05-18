@@ -14,6 +14,36 @@ const totalLikes = (blogs) => {
   return accumulator;
 }
 
+//which blog has the most likes
+const favoriteBlog = (blogs) => {
+
+    if(blogs.length == 0)
+    {
+        return null;
+    }
+
+    let mostFavoriteBlog = blogs[0]; //number of likes
+ 
+
+    for(let i = 1; i < blogs.length; i++)
+    {
+        if(blogs[i].likes > mostFavoriteBlog.likes)
+        {
+            mostFavoriteBlog = blogs[i];
+          
+        }
+    }
+
+    const res = {
+        title : mostFavoriteBlog.title,
+        author :mostFavoriteBlog.author,
+        likes : mostFavoriteBlog.likes
+    }
+
+    return res;
+
+}
+
 module.exports = {
-    dummy, totalLikes
+    dummy, totalLikes,favoriteBlog
   }
