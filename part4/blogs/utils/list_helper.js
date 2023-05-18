@@ -6,6 +6,14 @@ const dummy = (blogs) => {
     return 1;
 }
 
+//returns the total sum of likes in all of the blog posts.
+const totalLikes = (blogs) => {
+
+ const accumulator =  blogs.reduce((total,blog) => total + blog.likes, 0)
+    
+  return accumulator;
+}
+
 module.exports = {
-    dummy
+    dummy, totalLikes
   }
