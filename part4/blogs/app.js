@@ -2,16 +2,16 @@ const express = require('express')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
+const config = require('./utils/config')
 
-require('dotenv').config()
+
 const mongoose = require('mongoose')
 
 //The responsibility of establishing the connection to the database has been given
 // to the app.js module
 mongoose.set('strictQuery', false)
 
-const mongoUrl = process.env.MONGODB_URI
-mongoose.connect(mongoUrl)
+mongoose.connect(config.MONGODB_URI)
 
 app.use(cors())
 app.use(express.json())
