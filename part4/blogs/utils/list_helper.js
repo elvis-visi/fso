@@ -50,6 +50,11 @@ const favoriteBlog = (blogs) => {
 //return value also contains the number of blogs the top author
 const mostBlogs = (blogs) => {
 
+    if(blogs.length === 0)
+    {
+        return null;
+    }
+
     //hashmap  iterate over each blog, and map current author to his occurences
     let authorBlogs =  new Map();
 
@@ -78,21 +83,56 @@ const mostBlogs = (blogs) => {
         }
     }
 
+
     return {
         author : authorMostBlogs,
         blogs: maxCount
     }
     
-
-
 }
 
 //returns the author, whose blog posts have the largest amount of likes.
 //return value also contains the total number of likes that the author
 const mostLikes = (blogs) => {
 
+    if(blogs.length === 0)
+    {
+        return null
+    }
+
+    //map author likes
+
+    const map = new Map();
+
+    for(let blog of blogs)
+    {
+        if(map.has(blog.author))
+        {
+            map.set(blog.author, map.get(blog.author) + blog.likes)
+        }else{
+            map.set(blog.author, blog.likes)
+        }
+    }
+
+
+    let mostLikes = 0;
+    let authorMostLikes =  null; 
+
+    for(let [author,likes] of map.entries())
+    {
+        if(likes > mostLikes){
+            mostLikes = likes;
+            authorMostLikes =  author; 
+    }
+    }
+
+    return {
+        author : authorMostLikes,
+        likes : mostLikes
+    }
+
 }
 
 module.exports = {
-    dummy, totalLikes,favoriteBlog,mostBlogs
+    dummy, totalLikes,favoriteBlog,mostBlogs,mostLikes
   }
