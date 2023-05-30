@@ -2,6 +2,8 @@
 
 //dummy function that receives an array of blog posts as a parameter and always returns the value 1
 
+const _ = require('lodash');
+
 const dummy = (blogs) => {
     return 1;
 }
@@ -44,6 +46,53 @@ const favoriteBlog = (blogs) => {
 
 }
 
+//returns the author who has the largest amount of blogs.
+//return value also contains the number of blogs the top author
+const mostBlogs = (blogs) => {
+
+    //hashmap  iterate over each blog, and map current author to his occurences
+    let authorBlogs =  new Map();
+
+    for(let blog of blogs)
+    {
+
+        if(authorBlogs.has(blog.author))
+        {
+            authorBlogs.set(blog.author,authorBlogs.get(blog.author) + 1 )
+        }else{
+            authorBlogs.set(blog.author, 1);
+        }
+
+    }
+
+    let maxCount = 0;
+    let authorMostBlogs = null;
+    //iterate over map, who has the largest count
+
+    for( let [author,count] of authorBlogs.entries())
+    {
+        if(count > maxCount)
+        {
+            maxCount = count;
+            authorMostBlogs = author;
+        }
+    }
+
+    return {
+        author : authorMostBlogs,
+        blogs: maxCount
+    }
+    
+
+
+}
+
+//returns the author, whose blog posts have the largest amount of likes.
+//return value also contains the total number of likes that the author
+const mostLikes = (blogs) => {
+
+}
+
 module.exports = {
-    dummy, totalLikes,favoriteBlog
+    dummy, totalLikes,favoriteBlog,mostBlogs
   }

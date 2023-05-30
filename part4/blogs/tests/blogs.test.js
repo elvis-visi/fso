@@ -1,5 +1,6 @@
 const listHelper = require('../utils/list_helper')
 
+
 const blogs = [
     {
       _id: "5a422a851b54a676234d17f7",
@@ -107,6 +108,20 @@ describe('most favorited blog', () => {
             }
         )
     })
+
+})
+
+describe('author with most blogs', () => {
+
+  test('more than 1 author', ()=> {
+
+    let result = listHelper.mostBlogs(blogs)
+    expect(result).toEqual({
+      author: "Robert C. Martin",
+      blogs: 3
+    })
+
+  })
 
 })
 
