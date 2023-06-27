@@ -99,6 +99,60 @@ test('default to 0 if likes is missing from request', async () => {
 
 })
 
+/*
+verify that if the title or url properties are missing from the request data, the backend responds to the request with the status code 400 Bad Request.
+*/
+
+test('title is missing', async () => {
+    const blog = {
+        "author": "John Doe",
+        "url": "http://mynewblogpost.com"
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400)
+
+    const blogsAtEnd = await helper.blogsinDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
+test('url is missing', async () => {
+    const blog = {
+        "title": "no likes",
+        "author": "John Doe",
+
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400)
+
+    const blogsAtEnd = await helper.blogsinDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+})
+
+test('blog without url is not added', async () => {
+
+    const blog = {
+        "author": "John Doe",
+    }
+
+    await api
+        .post('/api/blogs')
+        .send(blog)
+        .expect(400)
+
+    const blogsAtEnd = await helper.blogsinDb()
+
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length)
+});
+
+
 
 afterAll(async () => {
     await mongoose.connection.close()

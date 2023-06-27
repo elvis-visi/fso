@@ -18,6 +18,14 @@ blogsRouter.post('/', (request, response) => {
     request.body.likes = 0;
   }
 
+  const { title, url } = request.body;
+
+  if (!title || !url) {
+    return response.status(400).json({
+      error: 'Title and URL are required',
+    });
+  }
+
   const blog = new Blog(request.body)
 
   blog
@@ -25,6 +33,7 @@ blogsRouter.post('/', (request, response) => {
     .then(result => {
       response.status(201).json(result)
     })
+    .catch(error => next(error))
 })
 
 module.exports = blogsRouter
