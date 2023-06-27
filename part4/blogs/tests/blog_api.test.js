@@ -38,11 +38,16 @@ test('id property exists in each blog object', async () => {
 
     // check whether there is a response body
     expect(response.body).toBeDefined()
+    //check for an empty response
+    expect(response.body).not.toHaveLength(0)
 
     // iterate over each blog object in the response body
     response.body.forEach(blog => {
         // for each blog object, check if the id property is defined
         expect(blog.id).toBeDefined()
+        // default ._id property should be removed from the blogs
+        expect(blog._id).toBeUndefined()
+
     })
 })
 
