@@ -51,6 +51,30 @@ test('id property exists in each blog object', async () => {
     })
 })
 
+//verify creation of new blog by posting to /api/blogs
+test('creating of new blog', async () => {
+
+    await api
+        .post('/api/blogs')
+        .send(helper.singleBlog)
+        .expect(201)
+        .expect('Content-Type', /application\/json/)
+
+    // Verify that the total number of blogs is increased by one
+
+    const blogsAtEnd = await helper.blogsinDb()
+    expect(blogsAtEnd).toHaveLength(helper.initialBlogs.length + 1)
+
+    // Verify that the content of the blog post is saved correctly to the database, singleBlog title:
+    // "My New Blog Post",
+
+    //get all titles through mapping, does it contain the above title
+
+    const allTitles = blogsAtEnd.map(blog => blog.title)
+    expect(allTitles).toContain("My New Blog Post")
+
+
+})
 
 
 
