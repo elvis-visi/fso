@@ -10,14 +10,12 @@ const app = require('../app')
 const api = supertest(app)
 const Blog = require('../models/blog')
 
+/*
+insertMany() performs only a single round trip to the server, while save() performs one for every document to be inserted
+*/
 beforeEach(async () => {
-    await Blog.deleteMany({})
-
-    const blogObjects = helper.initialBlogs
-        .map(blog => new Blog(blog))
-
-    const promiseArray = blogObjects.map(blog => blog.save())
-    await Promise.all(promiseArray)
+    await Blog.deleteMany({});
+    await Blog.insertMany(helper.initialBlogs)
 })
 
 test('blogs returned as JSON', async () => {
@@ -157,3 +155,18 @@ test('blog without url is not added', async () => {
 afterAll(async () => {
     await mongoose.connection.close()
 })
+
+
+
+
+
+
+
+
+/*
+
+insertMany(), the operation either inserts all documents or no documents. However, you can provide the ordered option to allow insertion of as many documents as possible, in the event of an error.
+
+That being said, using insertMany() in this context should work fine, as long as helper.initialBlogs is an array of objects where each object represents the data for a new blog.
+
+*/
