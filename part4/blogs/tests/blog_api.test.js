@@ -74,6 +74,30 @@ test('creating of new blog', async () => {
 
 })
 
+test('a blog can be deleted', async () => {
+
+    const blogsAtStart = await helper.blogsinDb();
+    const blogToDelete = blogsAtStart[0];
+
+    //the length at the end should be -1
+
+    await api
+        .delete(`/api/blogs/${blogToDelete.id}`)
+        .expect(204)
+
+    //the collection shouldn't contain a blog with the deleted id
+
+    const blogsAtEnd = await helper.blogsinDb();
+
+    expect(blogsAtEnd).toHaveLength(
+        blogsAtStart.length - 1
+    )
+
+    //array with all the remaining blogs' titles
+    const titles = blogsAtEnd.map(blog => blog.title)
+    expect(titles).not.toContain(blogToDelete.title)
+})
+
 
 //verify that if likes property is missing from request,
 //it will default to the value 0
