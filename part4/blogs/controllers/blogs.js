@@ -10,6 +10,15 @@ blogsRouter.get('/', (request, response) => {
     })
 })
 
+blogsRouter.get('/:id', async (request, response) => {
+  const blog = await Blog.findById(request.params.id)
+  if (blog) {
+    response.json(blog)
+  } else {
+    response.status(404).end()
+  }
+})
+
 blogsRouter.post('/', (request, response) => {
 
   //check whether the likes property is missing
@@ -34,6 +43,12 @@ blogsRouter.post('/', (request, response) => {
       response.status(201).json(result)
     })
     .catch(error => next(error))
+})
+
+//delete a single blog based on its id
+blogsRouter.delete('/:id', async (request, response, next) => {
+  await Blog.findByIdAndRemove(request.params.id)
+  response.status(204).end()
 })
 
 module.exports = blogsRouter
