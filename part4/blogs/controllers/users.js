@@ -23,7 +23,7 @@ usersRouter.post('/', async (request, response) => {
         passwordHash
     })
 
-    //save the documnet using mongoose operations
+    //save the document using mongoose operations
     const savedUser = await user.save();
 
     response.status(201).json(savedUser)
